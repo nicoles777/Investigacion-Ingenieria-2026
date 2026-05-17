@@ -4,6 +4,8 @@ const cors = require("cors");
 const { Server } = require("socket.io");
 require("dotenv").config();
 
+const { setupSocket } = require("./websocket/socketHandler");
+
 const app = express();
 const server = http.createServer(app);
 
@@ -23,26 +25,7 @@ app.get("/", (req, res) => {
   });
 });
 
-io.on("connection", (socket) => {
-  const userId = socket.handshake.query.userId;
-
-  console.log(`Client connected: ${userId || socket.id}`);
-
-  socket.emit("notification", {
-    id: "test-1",
-    category: "machine-failure",
-    message: "Test notification from server",
-    createdAt: Date.now()
-  });
-
-  socket.on("notification-ack", (data) => {
-    console.log("Notification acknowledged:", data);
-  });
-
-  socket.on("disconnect", () => {
-    console.log(`Client disconnected: ${userId || socket.id}`);
-  });
-});
+setupSocket(io);
 
 const PORT = process.env.PORT || 3000;
 
