@@ -41,3 +41,5 @@ module.exports = {
   setupSocket,
   getConnectedUsers
 };
+
+//creado con IA
